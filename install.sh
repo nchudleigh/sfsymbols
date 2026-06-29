@@ -29,4 +29,14 @@ case ":$PATH:" in
   *":$BINDIR:"*) ;;
   *) echo "Note: add $BINDIR to your PATH." ;;
 esac
+
+# Install the Claude Code skill too, if Claude Code is set up. Skip with SFSYMBOLS_SKILL=0.
+if [ "${SFSYMBOLS_SKILL:-1}" != "0" ] && [ -d "$HOME/.claude" ]; then
+  SKILL="$HOME/.claude/skills/sfsymbols"
+  mkdir -p "$SKILL"
+  if curl -fsSL -o "$SKILL/SKILL.md" "https://raw.githubusercontent.com/$REPO/main/skill/sfsymbols/SKILL.md"; then
+    echo "Installed Claude Code skill → $SKILL"
+  fi
+fi
+
 echo "Try: sfsymbols search car"

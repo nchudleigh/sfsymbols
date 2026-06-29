@@ -20,26 +20,25 @@ For a coding agent that's also a token win. One `check` call returns a few lines
 
 ## Install
 
-macOS only, since it reads the system catalog. Pick one:
-
-**One-liner** — grabs the latest universal binary:
+macOS only, since it reads the system catalog.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/nchudleigh/sfsymbols/main/install.sh | sh
 ```
 
-**Go**:
+That installs the binary and, if you use Claude Code, the [agent skill](#use-it-with-coding-agents) too (skip it with `SFSYMBOLS_SKILL=0`).
+
+<details>
+<summary>Other ways to install</summary>
 
 ```sh
-go install github.com/nchudleigh/sfsymbols@latest
+go install github.com/nchudleigh/sfsymbols@latest   # with Go
+
+git clone https://github.com/nchudleigh/sfsymbols   # from source
+cd sfsymbols && make install                        # -> /usr/local/bin (sudo)
 ```
 
-**From source** — `/usr/local/bin` (sudo), or `make build` for a local binary:
-
-```sh
-git clone https://github.com/nchudleigh/sfsymbols
-cd sfsymbols && make install
-```
+</details>
 
 The `render` command (and `search --render`) needs the Xcode Command Line Tools (`xcode-select --install`) the first time, to compile a tiny Swift helper. `check` and `search` don't need them.
 
@@ -95,28 +94,15 @@ Point Claude Code (or Cursor, Copilot, etc.) at `sfsymbols` so it checks a name 
 
 ### Claude Code skill
 
-The repo ships a skill that Claude Code runs on its own when it reaches for a symbol. Install the binary first (above), then install the skill.
-
-If you cloned the repo:
+The repo ships a skill that Claude Code runs on its own when it reaches for a symbol. The install one-liner above already sets it up. To add it on its own:
 
 ```sh
-make install-skill
+mkdir -p ~/.claude/skills/sfsymbols
+curl -fsSL https://raw.githubusercontent.com/nchudleigh/sfsymbols/main/skill/sfsymbols/SKILL.md \
+  -o ~/.claude/skills/sfsymbols/SKILL.md
 ```
 
-User-wide, without the repo (copies the skill from a clone or download):
-
-```sh
-mkdir -p ~/.claude/skills
-cp -R skill/sfsymbols ~/.claude/skills/sfsymbols
-```
-
-For one project only, install into that project's `.claude/skills` instead:
-
-```sh
-make install-skill SKILLDIR=.claude/skills
-```
-
-Start a new Claude Code session and it picks the skill up. You can also invoke it directly with `/sfsymbols`.
+Start a new Claude Code session and it picks the skill up, or invoke it directly with `/sfsymbols`. For one project only, put it in that project's `.claude/skills/sfsymbols/` instead. (From a clone of this repo, `make install-skill` does the same thing.)
 
 ### Other agents
 

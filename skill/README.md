@@ -8,23 +8,17 @@ Install the binary first (see the main README), then wire up your agent.
 
 ## Claude Code
 
-This follows the [Claude Code skills](https://code.claude.com/docs/en/skills) layout: a directory named after the skill with `SKILL.md` inside. Copy `skill/sfsymbols` to one of these locations.
-
-Personal (all your projects), lands at `~/.claude/skills/sfsymbols/SKILL.md`:
+The [main install one-liner](../README.md#install) already drops the skill into `~/.claude/skills/sfsymbols/` when it sees Claude Code. To add it on its own:
 
 ```sh
-make install-skill                                  # from a clone of this repo
-# or by hand from a clone/download:
-mkdir -p ~/.claude/skills && cp -R skill/sfsymbols ~/.claude/skills/sfsymbols
+mkdir -p ~/.claude/skills/sfsymbols
+curl -fsSL https://raw.githubusercontent.com/nchudleigh/sfsymbols/main/skill/sfsymbols/SKILL.md \
+  -o ~/.claude/skills/sfsymbols/SKILL.md
 ```
 
-Project only, lands at `.claude/skills/sfsymbols/SKILL.md` (commit it to share with your team):
+For one project only, use that project's `.claude/skills/sfsymbols/SKILL.md` instead and commit it to share with your team. From a clone of this repo, `make install-skill` (or `make install-skill SKILLDIR=.claude/skills`) does the same copy.
 
-```sh
-make install-skill SKILLDIR=.claude/skills
-```
-
-Editing an existing skill takes effect live. Creating the `skills/` directory for the first time needs a fresh Claude Code session so the directory gets watched. Claude then loads the skill on its own when it reaches for a symbol, or you can run `/sfsymbols` directly. The skill pre-approves `Bash(sfsymbols *)`; for a project install that applies once you accept the workspace trust prompt.
+This is the standard [Claude Code skills](https://code.claude.com/docs/en/skills) layout: a directory named after the skill with `SKILL.md` inside. Editing an existing skill takes effect live; creating the `skills/` directory for the first time needs a fresh session so it gets watched. Claude loads the skill when it reaches for a symbol, or run `/sfsymbols` directly. The skill pre-approves `Bash(sfsymbols *)`; for a project install that applies once you accept the workspace trust prompt.
 
 ## Cursor, Windsurf, Copilot, and others
 
