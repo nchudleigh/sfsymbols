@@ -20,18 +20,25 @@ For a coding agent that's also a token win. One `check` call returns a few lines
 
 ## Install
 
-macOS only, since it reads the system catalog.
+macOS only, since it reads the system catalog. Pick one:
+
+**One-liner** — grabs the latest universal binary:
 
 ```sh
-# One-liner (grabs the latest universal binary)
 curl -fsSL https://raw.githubusercontent.com/nchudleigh/sfsymbols/main/install.sh | sh
+```
 
-# With Go
+**Go**:
+
+```sh
 go install github.com/nchudleigh/sfsymbols@latest
+```
 
-# From source
+**From source** — `/usr/local/bin` (sudo), or `make build` for a local binary:
+
+```sh
 git clone https://github.com/nchudleigh/sfsymbols
-cd sfsymbols && make install     # /usr/local/bin (sudo), or `make build` for a local binary
+cd sfsymbols && make install
 ```
 
 The `render` command (and `search --render`) needs the Xcode Command Line Tools (`xcode-select --install`) the first time, to compile a tiny Swift helper. `check` and `search` don't need them.
@@ -86,13 +93,34 @@ sfsymbols check 123.rectangle
 
 Point Claude Code (or Cursor, Copilot, etc.) at `sfsymbols` so it checks a name before writing it into Swift. It stops invented names from shipping, and it's cheaper than guess-build-fix: one call, a few lines back, done.
 
-For Claude Code, install the bundled skill and it'll run on its own when it reaches for a symbol:
+### Claude Code skill
+
+The repo ships a skill that Claude Code runs on its own when it reaches for a symbol. Install the binary first (above), then install the skill.
+
+If you cloned the repo:
 
 ```sh
-make install-skill        # -> ~/.claude/skills/sfsymbols
+make install-skill
 ```
 
-For other agents, drop a rule into your project's `AGENTS.md` / `.cursorrules` / `CLAUDE.md`. See [`skill/README.md`](skill/README.md) for the snippet and details.
+User-wide, without the repo (copies the skill from a clone or download):
+
+```sh
+mkdir -p ~/.claude/skills
+cp -R skill/sfsymbols ~/.claude/skills/sfsymbols
+```
+
+For one project only, install into that project's `.claude/skills` instead:
+
+```sh
+make install-skill SKILLDIR=.claude/skills
+```
+
+Start a new Claude Code session and it picks the skill up. You can also invoke it directly with `/sfsymbols`.
+
+### Other agents
+
+Drop a rule into your project's `AGENTS.md` / `.cursorrules` / `CLAUDE.md` telling the agent to verify names with `sfsymbols check` before writing them. The exact snippet is in [`skill/README.md`](skill/README.md).
 
 ## How it works
 
