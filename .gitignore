@@ -1,0 +1,6 @@
+# build output
+/sfsymbols
+/dist/
+
+# macOS
+.DS_Store
