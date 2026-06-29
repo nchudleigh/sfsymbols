@@ -1,22 +1,30 @@
 # sfsymbols as a coding-agent skill
 
-Let an agent verify SF Symbol names instead of guessing them. The agent runs `sfsymbols check` before writing a name into Swift, so it never ships `van.fill`, and it skips the guess-build-fix loop that burns tokens and context.
+Let an agent verify SF Symbol names instead of guessing them. The agent runs `sfsymbols check` before writing a name into Swift, so it never ships `van.fill`, and it skips the guess-build-fix loop.
 
-First make sure the binary is installed (see the main README), then wire up your agent.
+It's also a token win. The usual ways an agent handles SF Symbols are expensive: guess a name and read a wall of compiler errors when it's wrong; write a `UIImage(systemName:)` probe loop and read the dump; or try to recall thousands of catalog names it doesn't actually know. One `check` call replaces all of that with a few verified lines, and `search` returns about ten ranked matches instead of an attempt to enumerate the catalog.
+
+Install the binary first (see the main README), then wire up your agent.
 
 ## Claude Code
 
-Copy the skill into your skills directory:
+This follows the [Claude Code skills](https://code.claude.com/docs/en/skills) layout: a directory named after the skill with `SKILL.md` inside. Copy `skill/sfsymbols` to one of these locations.
+
+Personal (all your projects), lands at `~/.claude/skills/sfsymbols/SKILL.md`:
 
 ```sh
-# from this repo
-make install-skill                       # -> ~/.claude/skills/sfsymbols
-# or by hand
-cp -R skill/sfsymbols ~/.claude/skills/sfsymbols   # user-wide
-cp -R skill/sfsymbols .claude/skills/sfsymbols     # this project only
+make install-skill                                  # from a clone of this repo
+# or by hand from a clone/download:
+mkdir -p ~/.claude/skills && cp -R skill/sfsymbols ~/.claude/skills/sfsymbols
 ```
 
-Claude Code picks it up on the next session and invokes it on its own when it's about to use an SF Symbol. You can also call it explicitly with `/sfsymbols`.
+Project only, lands at `.claude/skills/sfsymbols/SKILL.md` (commit it to share with your team):
+
+```sh
+make install-skill SKILLDIR=.claude/skills
+```
+
+Editing an existing skill takes effect live. Creating the `skills/` directory for the first time needs a fresh Claude Code session so the directory gets watched. Claude then loads the skill on its own when it reaches for a symbol, or you can run `/sfsymbols` directly. The skill pre-approves `Bash(sfsymbols *)`; for a project install that applies once you accept the workspace trust prompt.
 
 ## Cursor, Windsurf, Copilot, and others
 
