@@ -16,6 +16,8 @@ If you've ever asked an LLM for an SF Symbol, you've seen it confidently invent 
 
 The names already live on your disk, in `/System/Library/CoreServices/CoreGlyphs.bundle` — the same files the SF Symbols app and UIKit read. `sfsymbols` reads them too. So a check is just a lookup: does the name exist, and which OS version added it, for each Apple platform. About 9,200 symbols, 3,200 of them with search keywords, plus the name aliases.
 
+For a coding agent that's also a token win. One `check` call returns a few lines of verified output instead of the agent guessing a name, building, reading the compiler error, and trying again — or printing a probe loop's output into its context.
+
 ## Install
 
 macOS only, since it reads the system catalog.
@@ -79,6 +81,18 @@ sfsymbols check 123.rectangle
 | `--size <rows>` | render, search | glyph height in terminal rows (default 1, matches text) |
 | `--weight <w>` | render, search | `regular` through `black` (default `semibold`) |
 | `--color <rrggbb>` | render, search | glyph tint (default `ffffff`) |
+
+## Use it with coding agents
+
+Point Claude Code (or Cursor, Copilot, etc.) at `sfsymbols` so it checks a name before writing it into Swift. It stops invented names from shipping, and it's cheaper than guess-build-fix: one call, a few lines back, done.
+
+For Claude Code, install the bundled skill and it'll run on its own when it reaches for a symbol:
+
+```sh
+make install-skill        # -> ~/.claude/skills/sfsymbols
+```
+
+For other agents, drop a rule into your project's `AGENTS.md` / `.cursorrules` / `CLAUDE.md`. See [`skill/README.md`](skill/README.md) for the snippet and details.
 
 ## How it works
 

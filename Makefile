@@ -2,7 +2,9 @@ BINARY := sfsymbols
 DIST := dist
 BINDIR ?= /usr/local/bin
 
-.PHONY: build universal install clean clean-cache test
+SKILLDIR ?= $(HOME)/.claude/skills
+
+.PHONY: build universal install install-skill clean clean-cache test
 
 build:
 	go build -o $(BINARY) .
@@ -19,6 +21,12 @@ universal:
 # Override dir with `make install BINDIR=~/.local/bin` to avoid sudo.
 install: universal
 	install -m 0755 $(DIST)/$(BINARY) $(BINDIR)/$(BINARY)
+
+# Install the Claude Code skill. SKILLDIR=.claude/skills for project-only.
+install-skill:
+	mkdir -p $(SKILLDIR)
+	cp -R skill/sfsymbols $(SKILLDIR)/sfsymbols
+	@echo "Installed skill -> $(SKILLDIR)/sfsymbols"
 
 test: build
 	./$(BINARY) check bus.fill car.ferry.fill && ./$(BINARY) search car --limit 3
