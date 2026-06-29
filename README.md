@@ -2,13 +2,9 @@
 
 Check, search, and render SF Symbols from the terminal. It reads the catalog macOS already ships, so you get a real answer instead of guessing names.
 
-```
-$ sfsymbols check van.fill bus.fill hatchback.fill car.ferry.fill
-✗ van.fill        not found
-✓ bus.fill        (iOS 14.0+)
-✗ hatchback.fill  not found
-✓ car.ferry.fill  (iOS 15.0+)
-```
+<p align="center">
+  <img src="docs/demo.png" alt="sfsymbols validating names and rendering matching glyphs inline in the terminal" width="720">
+</p>
 
 ## Why
 
